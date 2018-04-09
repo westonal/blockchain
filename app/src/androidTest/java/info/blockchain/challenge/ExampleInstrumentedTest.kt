@@ -1,4 +1,4 @@
-package challenge.blockchain.info.blockchainchallenge
+package info.blockchain.challenge
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getTargetContext()
-        assertEquals("challenge.blockchain.info.blockchainchallenge", appContext.packageName)
+        assertEquals("info.blockchain.challenge", appContext.packageName)
     }
 }
