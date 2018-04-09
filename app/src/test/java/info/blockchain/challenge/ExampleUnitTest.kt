@@ -1,4 +1,4 @@
-package challenge.blockchain.info.blockchainchallenge
+package info.blockchain.challenge
 
 import org.junit.Test
 
