@@ -25,7 +25,7 @@ class Wallet(
         val finalBalance: Long
 )
 
-class Transaction (
-    @SerializedName("result")
-    val result: Long
+class Transaction(
+        @SerializedName("result")
+        val result: Long
 )

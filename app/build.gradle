@@ -51,6 +51,7 @@ dependencies {
     kapt 'com.android.databinding:compiler:3.0.1'
 
     testImplementation 'junit:junit:4.12'
+    testImplementation 'org.amshove.kluent:kluent:1.34'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 }
