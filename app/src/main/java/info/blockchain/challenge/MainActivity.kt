@@ -2,9 +2,11 @@ package info.blockchain.challenge
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import info.blockchain.challenge.api.MultiAddress
 import info.blockchain.challenge.api.Transaction
-import info.blockchain.challenge.ui.TransactionListAdapter
+import info.blockchain.challenge.ui.TransactionsAdapter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
@@ -16,11 +18,16 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import timber.log.Timber
 
+
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var viewAdapter: RecyclerView.Adapter<*>
+    private lateinit var viewManager: RecyclerView.LayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        recycler_view.layoutManager = LinearLayoutManager(this)
 
         val retrofit = Retrofit.Builder()
                 .baseUrl("https://blockchain.info/")
@@ -51,7 +58,7 @@ class MainActivity : AppCompatActivity() {
                 // Note: Only now do I switch to the main thread, just before we need to update the UI
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy {
-                    transactions.adapter = TransactionListAdapter(this, it)
+                    recycler_view.adapter = TransactionsAdapter(it)
                 }
     }
 
