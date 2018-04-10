@@ -24,29 +24,36 @@
             android:minHeight="50dp">
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/value"
                 android:layout_width="160dp"
-                android:layout_height="15dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
                 android:text="@{item.value.toString()}"
-                app:layout_constraintEnd_toStartOf="@+id/imageView"
+                app:layout_constraintEnd_toStartOf="@+id/direction"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 tools:text="100.00000000 BTC"/>
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/direction"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:layout_marginTop="8dp"
                 android:src="@{item.icon}"
+                app:layout_constraintEnd_toStartOf="@+id/address"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/value"
+                tools:src="@drawable/ic_received_24dp"/>
+
+            <TextView
+                android:id="@+id/address"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@{item.address}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/textView"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:src="@drawable/ic_received_24dp"/>
+                app:layout_constraintStart_toEndOf="@+id/direction"
+                tools:text="1G4i7H9qyoy5EjUWNnJapNRDDRt6GHvjuw"/>
         </android.support.constraint.ConstraintLayout>
 
     </android.support.v7.widget.CardView>

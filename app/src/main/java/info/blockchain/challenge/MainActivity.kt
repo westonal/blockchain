@@ -41,6 +41,9 @@ class MainActivity : AppCompatActivity() {
                     Timber.d("Final balance: ${it.wallet.finalBalance}")
                     for (transaction in it.transactions) {
                         Timber.d("Transaction: ${transaction.result}")
+                        for (output in transaction.outputs) {
+                            Timber.d(" Output: ${output.address} ${output.xpub}")
+                        }
                     }
                 }
                 // Note: map to viewmodel while still in the background thread

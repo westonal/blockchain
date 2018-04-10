@@ -5,7 +5,8 @@ import info.blockchain.challenge.R
 
 class Transaction(
         // Note: Here I'm preferring to use a strong type, not sticking to the Long from the api call
-        val value: Btc
+        val value: Btc,
+        val address: String = ""
 ) {
     // Note: the Res annotation can help catch errors, e.g. attempting using this where a String id is expected.
     @DrawableRes
