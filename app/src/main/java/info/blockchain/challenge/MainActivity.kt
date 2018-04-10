@@ -6,7 +6,9 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import info.blockchain.challenge.api.MultiAddress
 import info.blockchain.challenge.api.Transaction
-import info.blockchain.challenge.ui.TransactionsAdapter
+import info.blockchain.challenge.ui.CardAdapter
+import info.blockchain.challenge.ui.viewmodel.Account
+import info.blockchain.challenge.ui.viewmodel.satoshiToBtc
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
@@ -54,11 +56,14 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 // Note: map to viewmodel while still in the background thread
-                .map { it.transactions.map(Transaction::mapToViewModel) }
+                .map {
+                    listOf(Account(it.wallet.finalBalance.satoshiToBtc())) +
+                            it.transactions.map(Transaction::mapToViewModel)
+                }
                 // Note: Only now do I switch to the main thread, just before we need to update the UI
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy {
-                    recycler_view.adapter = TransactionsAdapter(it)
+                    recycler_view.adapter = CardAdapter(it)
                 }
     }
 
