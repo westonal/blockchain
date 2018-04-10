@@ -7,7 +7,7 @@
 
         <variable
             name="item"
-            type="info.blockchain.challenge.ui.viewmodel.Transaction"/>
+            type="info.blockchain.challenge.ui.viewmodel.TransactionCardViewModel"/>
 
     </data>
 

@@ -1,24 +1,23 @@
 package info.blockchain.challenge
 
 import info.blockchain.challenge.api.TXO
-import info.blockchain.challenge.ui.viewmodel.Transaction
+import info.blockchain.challenge.api.Transaction
+import info.blockchain.challenge.ui.viewmodel.TransactionCardViewModel
 import info.blockchain.challenge.ui.viewmodel.satoshiToBtc
 import org.amshove.kluent.`should equal`
 import org.junit.Test
-
-typealias ApiTransaction = info.blockchain.challenge.api.Transaction
 
 class TransactionMappingTests {
 
     @Test
     fun `can map a positive value from an api transaction`() {
-        val transaction: Transaction = ApiTransaction(result = 12345678L).mapToViewModel()
+        val transaction: TransactionCardViewModel = Transaction(result = 12345678L).mapToViewModel()
         transaction.value `should equal` 12345678L.satoshiToBtc()
     }
 
     @Test
     fun `can map a negative value from an api transaction`() {
-        val transaction: Transaction = ApiTransaction(result = -123456789L).mapToViewModel()
+        val transaction: TransactionCardViewModel = Transaction(result = -123456789L).mapToViewModel()
         transaction.value `should equal` (-123456789L).satoshiToBtc()
     }
 
@@ -28,13 +27,13 @@ class TransactionAddressMappingTests {
 
     @Test
     fun `empty address`() {
-        val transaction = ApiTransaction().mapToViewModel()
+        val transaction = Transaction().mapToViewModel()
         transaction.address `should equal` ""
     }
 
     @Test
     fun `single output with null xpub`() {
-        val transaction = ApiTransaction(
+        val transaction = Transaction(
                 outputs = listOf(
                         TXO(
                                 address = "1LgE7gy6Tq9VKbV4FhsLHYA6QrMP8eJXrJ",
@@ -46,7 +45,7 @@ class TransactionAddressMappingTests {
 
     @Test
     fun `single output with xpub`() {
-        val transaction = ApiTransaction(
+        val transaction = Transaction(
                 outputs = listOf(
                         TXO(
                                 address = "1AP6CyqYVhEcPMqYCReHoAFVZaVLWAKaJN",
@@ -58,7 +57,7 @@ class TransactionAddressMappingTests {
 
     @Test
     fun `two outputs, first with xpub`() {
-        val transaction = ApiTransaction(
+        val transaction = Transaction(
                 outputs = listOf(
                         TXO(address = "15snCyagJkvpaQGY5hMfcZkgvPDwf6FneP",
                                 xpub = Any()),
@@ -73,7 +72,7 @@ class TransactionAddressMappingTests {
     // the first
     @Test
     fun `two outputs, both without xpub`() {
-        val transaction = ApiTransaction(
+        val transaction = Transaction(
                 outputs = listOf(
                         TXO(address = "1Q2XkxYnd56Saz6GnrJuuxhFDWNj6BVHrn",
                                 xpub = null),

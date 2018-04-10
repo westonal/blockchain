@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Blockchain Challenge</string>
+    <string name="generic_error_retry">Failed to get account details, tap to retry</string>
 </resources>

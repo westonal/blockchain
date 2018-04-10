@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="item"
+            type="info.blockchain.challenge.ui.viewmodel.ErrorCardViewModel"/>
+
+    </data>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/mtrl_card_spacing_bottom"
+        android:layout_marginLeft="@dimen/mtrl_card_spacing_edge"
+        android:layout_marginRight="@dimen/mtrl_card_spacing_edge"
+        android:layout_marginTop="@dimen/mtrl_card_spacing_top"
+        android:onClick="@{()->item.executeRetry()}">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/mtrl_card_inner_margin">
+
+            <ImageView
+                android:id="@+id/error_icon"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:layout_marginStart="8dp"
+                android:src="@drawable/ic_error_outline_38dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                android:id="@+id/message"
+                android:layout_width="wrap_content"
+                android:layout_height="23dp"
+                android:layout_marginStart="8dp"
+                android:text="@{item.message}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/error_icon"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Could not get account details"/>
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.v7.widget.CardView>
+</layout>

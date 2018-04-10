@@ -1,6 +1,5 @@
-package info.blockchain.challenge.viewmodel
+package info.blockchain.challenge.ui.viewmodel
 
-import info.blockchain.challenge.ui.viewmodel.satoshiToBtc
 import org.amshove.kluent.`should be`
 import org.amshove.kluent.`should equal`
 import org.junit.Test

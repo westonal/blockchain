@@ -5,31 +5,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import info.blockchain.challenge.databinding.AccountLayoutBinding
+import info.blockchain.challenge.databinding.ErrorLayoutBinding
 import info.blockchain.challenge.databinding.TransactionLayoutBinding
-import info.blockchain.challenge.ui.viewmodel.Account
-import info.blockchain.challenge.ui.viewmodel.Card
-import info.blockchain.challenge.ui.viewmodel.Transaction
+import info.blockchain.challenge.ui.viewmodel.AccountCardViewModel
+import info.blockchain.challenge.ui.viewmodel.CardViewModel
+import info.blockchain.challenge.ui.viewmodel.ErrorCardViewModel
+import info.blockchain.challenge.ui.viewmodel.TransactionCardViewModel
 
-class CardAdapter(private val transactions: List<Card>) :
+class CardAdapter(private val transactions: List<CardViewModel>) :
         RecyclerView.Adapter<CardViewHolder>() {
 
     override fun getItemViewType(position: Int) =
             when (transactions[position]) {
-                is Account -> 0
-                is Transaction -> 1
+                is AccountCardViewModel -> 0
+                is TransactionCardViewModel -> 1
+                is ErrorCardViewModel -> 2
             }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         return when (viewType) {
-            0 -> {
-                val itemBinding = AccountLayoutBinding.inflate(layoutInflater, parent, false)
-                AccountViewHolder(itemBinding)
-            }
-            1 -> {
-                val itemBinding = TransactionLayoutBinding.inflate(layoutInflater, parent, false)
-                TransactionViewHolder(itemBinding)
-            }
+            0 -> AccountViewHolder(AccountLayoutBinding.inflate(layoutInflater, parent, false))
+            1 -> TransactionViewHolder(TransactionLayoutBinding.inflate(layoutInflater, parent, false))
+            2 -> ErrorViewHolder(ErrorLayoutBinding.inflate(layoutInflater, parent, false))
             else -> throw RuntimeException("Unexpected viewType")
         }
     }
@@ -40,9 +38,11 @@ class CardAdapter(private val transactions: List<Card>) :
         // the casting for me too
         when (holder) {
             is AccountViewHolder ->
-                holder.bind(item as Account)
+                holder.bind(item as AccountCardViewModel)
             is TransactionViewHolder ->
-                holder.bind(item as Transaction)
+                holder.bind(item as TransactionCardViewModel)
+            is ErrorViewHolder ->
+                holder.bind(item as ErrorCardViewModel)
         }
     }
 
@@ -51,11 +51,12 @@ class CardAdapter(private val transactions: List<Card>) :
 
 sealed class CardViewHolder(val view: View) : RecyclerView.ViewHolder(view)
 
+// Note: The next 3 classes are quite similar, there is a way to reduce this boiler plate
 private class TransactionViewHolder(
         private val binding: TransactionLayoutBinding
 ) : CardViewHolder(binding.root) {
 
-    fun bind(item: Transaction) {
+    fun bind(item: TransactionCardViewModel) {
         binding.item = item
         binding.executePendingBindings()
     }
@@ -65,8 +66,19 @@ private class AccountViewHolder(
         private val binding: AccountLayoutBinding
 ) : CardViewHolder(binding.root) {
 
-    fun bind(item: Account) {
+    fun bind(item: AccountCardViewModel) {
         binding.item = item
         binding.executePendingBindings()
     }
 }
+
+private class ErrorViewHolder(
+        private val binding: ErrorLayoutBinding
+) : CardViewHolder(binding.root) {
+
+    fun bind(item: ErrorCardViewModel) {
+        binding.item = item
+        binding.executePendingBindings()
+    }
+}
+

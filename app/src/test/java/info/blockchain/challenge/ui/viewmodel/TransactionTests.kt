@@ -1,8 +1,6 @@
-package info.blockchain.challenge.viewmodel
+package info.blockchain.challenge.ui.viewmodel
 
 import info.blockchain.challenge.R
-import info.blockchain.challenge.ui.viewmodel.Transaction
-import info.blockchain.challenge.ui.viewmodel.satoshiToBtc
 import org.amshove.kluent.`should equal`
 import org.junit.Test
 
@@ -18,6 +16,6 @@ class TransactionTests {
         givenTransactionOfValue(-1L).icon `should equal` R.drawable.ic_sent_24dp
     }
 
-    private fun givenTransactionOfValue(value: Long) = Transaction(value.satoshiToBtc())
+    private fun givenTransactionOfValue(value: Long) = TransactionCardViewModel(value.satoshiToBtc())
 
 }
