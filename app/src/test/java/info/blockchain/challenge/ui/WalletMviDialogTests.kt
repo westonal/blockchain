@@ -21,12 +21,12 @@ import org.amshove.kluent.`should equal`
 import org.amshove.kluent.any
 import org.junit.Test
 
-class WalletModuleTests {
+class WalletMviDialogTests {
 
     @Test
     fun `given no xpubs, no view models are created and service is not called`() {
         val service: MultiAddress = mock()
-        WalletModule(service)
+        WalletMviDialog(service)
                 .cardViewModels.test().assertNoValues()
         verifyZeroInteractions(service)
     }
@@ -35,7 +35,7 @@ class WalletModuleTests {
     fun `given a single xpub, the service is called and result is mapped to a view model`() {
         val xpub = "xpub12345"
         val service: MultiAddress = givenServiceReturns(xpub, Transaction(result = 2L))
-        val walletModule = WalletModule(service)
+        val walletModule = WalletMviDialog(service)
         val testObserver = walletModule
                 .cardViewModels.test()
 
@@ -48,7 +48,7 @@ class WalletModuleTests {
     fun `given a single xpub, the service is called just once`() {
         val xpub = "xpub12345"
         val service: MultiAddress = givenServiceReturns(xpub)
-        val walletModule = WalletModule(service)
+        val walletModule = WalletMviDialog(service)
         walletModule.cardViewModels.test()
         walletModule.xpub = xpub
         verify(service).multiaddr(xpub)
@@ -59,7 +59,7 @@ class WalletModuleTests {
     fun `given the same xpub twice, the service is called just once`() {
         val xpub = "xpub12345"
         val service: MultiAddress = givenServiceReturns(xpub)
-        val walletModule = WalletModule(service)
+        val walletModule = WalletMviDialog(service)
 
         walletModule.cardViewModels.test()
         walletModule.xpub = xpub
@@ -77,7 +77,7 @@ class WalletModuleTests {
             on { it.multiaddr(xpub1) } `it returns` apiResult()
             on { it.multiaddr(xpub2) } `it returns` apiResult()
         }
-        val walletModule = WalletModule(service)
+        val walletModule = WalletMviDialog(service)
 
         walletModule.cardViewModels.test()
         walletModule.xpub = xpub1
@@ -92,7 +92,7 @@ class WalletModuleTests {
     fun `given a single xpub, the service is called zero times if not subscribed to`() {
         val xpub = "xpub12345"
         val service: MultiAddress = givenServiceReturns(xpub)
-        WalletModule(service).xpub = xpub
+        WalletMviDialog(service).xpub = xpub
         verifyZeroInteractions(service)
     }
 
@@ -100,7 +100,7 @@ class WalletModuleTests {
     fun `given a single xpub, the service is called and result with 2 transactions is mapped to a view model`() {
         val xpub = "xpub23456"
         val service: MultiAddress = givenServiceReturns(xpub, Transaction(result = 2L), Transaction(result = 3L))
-        val walletModule = WalletModule(service)
+        val walletModule = WalletMviDialog(service)
         val testObserver = walletModule
                 .cardViewModels.test()
 
@@ -115,7 +115,7 @@ class WalletModuleTests {
     fun `if the service throws an exception, a single ErrorCard is shown`() {
         val xpub = "xpub23456"
         val service: MultiAddress = givenServiceThrows()
-        val walletModule = WalletModule(service)
+        val walletModule = WalletMviDialog(service)
         val testObserver = walletModule
                 .cardViewModels.test()
 
@@ -137,7 +137,7 @@ class WalletModuleTests {
                     // Note: set up to fail once, then succeed
                     .`it returns`(apiResult(Transaction(result = 2L)))
         }
-        val walletModule = WalletModule(service)
+        val walletModule = WalletMviDialog(service)
         val testObserver = walletModule
                 .cardViewModels.test()
 
