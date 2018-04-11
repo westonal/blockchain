@@ -8,4 +8,20 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="Text">
+    </style>
+
+    <style name="Text.Address">
+        <item name="android:fontFamily">monospace</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="Text.Value">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="Text.Value.Large">
+        <item name="android:textSize">20sp</item>
+    </style>
+
 </resources>

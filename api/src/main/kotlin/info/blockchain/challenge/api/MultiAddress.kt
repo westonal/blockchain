@@ -25,7 +25,18 @@ class Wallet(
         val finalBalance: Long
 )
 
-class Transaction (
-    @SerializedName("result")
-    val result: Long
+class Transaction(
+        @SerializedName("result")
+        val result: Long = 0L,
+
+        @SerializedName("out")
+        val outputs: List<TXO> = emptyList()
+)
+
+class TXO(
+        @SerializedName("addr")
+        val address: String,
+
+        @SerializedName("xpub")
+        val xpub: Any?
 )
