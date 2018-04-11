@@ -20,6 +20,10 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <style name="Text.Date">
+        <item name="android:textSize">12sp</item>
+    </style>
+
     <style name="Text.Value.Large">
         <item name="android:textSize">20sp</item>
     </style>

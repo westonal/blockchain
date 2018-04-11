@@ -4,7 +4,8 @@ import info.blockchain.challenge.R
 import org.amshove.kluent.`should equal`
 import org.junit.Test
 
-class TransactionTests {
+
+class TransactionCardViewModelIconTests {
 
     @Test
     fun `a positive value shows the received icon`() {

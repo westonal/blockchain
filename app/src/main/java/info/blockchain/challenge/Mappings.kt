@@ -6,6 +6,7 @@ import info.blockchain.challenge.ui.viewmodel.AccountCardViewModel
 import info.blockchain.challenge.ui.viewmodel.CardViewModel
 import info.blockchain.challenge.ui.viewmodel.TransactionCardViewModel
 import info.blockchain.challenge.ui.viewmodel.satoshiToBtc
+import java.util.*
 
 // Note: These aliases make the code clearer due to the name clash. Few places will need both, and this prevents us
 // resorting to smurf-naming like: info.blockchain.challenge.api.TransactionApi
@@ -16,7 +17,8 @@ typealias ViewModelTransaction = TransactionCardViewModel
 fun ApiTransaction.mapToViewModel() =
         ViewModelTransaction(
                 value = this.result.satoshiToBtc(),
-                address = this.outputs.findFirstNonWalletAddress()
+                address = this.outputs.findFirstNonWalletAddress(),
+                date = Date(this.timeStamp * 1000)
         )
 
 fun Result.mapToCardViewModels(): List<CardViewModel> =
