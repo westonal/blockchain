@@ -10,27 +10,18 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
-import okhttp3.OkHttpClient
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.closestKodein
+import org.kodein.di.generic.instance
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), KodeinAware {
+    override val kodein by closestKodein()
+
+    private val retrofit: Retrofit by instance()
 
     private val disposable = CompositeDisposable()
-
-    // Note: I would normally inject this, but chose not to set up Dagger for this demo
-    private val retrofit = Retrofit.Builder()
-            .baseUrl("https://blockchain.info/")
-            .addConverterFactory(GsonConverterFactory.create())
-            // Note: this line puts all Rx calls on the IO scheduler, so no need to specify subscribeOn later
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
-            .client(OkHttpClient.Builder()
-                    .addInterceptor(timberHttpLoggingInterceptor())
-                    .build())
-            .build()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
