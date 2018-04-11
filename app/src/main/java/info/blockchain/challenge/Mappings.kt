@@ -18,7 +18,7 @@ fun ApiTransaction.mapToViewModel() =
         ViewModelTransaction(
                 value = this.result.satoshiToBtc(),
                 address = this.outputs.findFirstNonWalletAddress(),
-                date = Date(this.timeStamp)
+                date = Date(this.timeStamp * 1000)
         )
 
 fun Result.mapToCardViewModels(): List<CardViewModel> =

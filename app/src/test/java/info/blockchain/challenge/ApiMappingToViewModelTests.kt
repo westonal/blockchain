@@ -59,8 +59,8 @@ class ResultMappingTests {
                 )
         ).mapToCardViewModels()
         cards.size `should be` 3
-        cards[1] as TransactionVm `should have time stamp` 1523447258L
-        cards[2] as TransactionVm `should have time stamp` 1491868800L
+        cards[1] as TransactionVm `should have time stamp` 1523447258_000L
+        cards[2] as TransactionVm `should have time stamp` 1491868800_000L
     }
 }
 
