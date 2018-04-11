@@ -26,7 +26,7 @@ class TransactionCardViewModel(
 
     val dateTime: String
         get() {
-            return SimpleDateFormat.getDateTimeInstance().format(date)
+            return date?.let { SimpleDateFormat.getDateTimeInstance().format(it) } ?: ""
         }
 }
 

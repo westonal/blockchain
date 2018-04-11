@@ -7,6 +7,13 @@ import java.util.*
 class TransactionCardViewModelDateTimeTests {
 
     @Test
+    fun `null date time formatting`() {
+        Locale.setDefault(Locale.UK)
+        givenTransactionOfDateTime(null)
+                .dateTime `should equal` ""
+    }
+
+    @Test
     fun `date time formatted to the locale US`() {
         Locale.setDefault(Locale.US)
         givenTransactionOfDateTime(
@@ -27,7 +34,7 @@ class TransactionCardViewModelDateTimeTests {
                 set(year, month - 1, day, hour, minute, second)
             }.time
 
-    private fun givenTransactionOfDateTime(date: Date) = TransactionCardViewModel(0L.satoshiToBtc(),
+    private fun givenTransactionOfDateTime(date: Date?) = TransactionCardViewModel(0L.satoshiToBtc(),
             date = date)
 
 }

@@ -29,6 +29,9 @@ class Transaction(
         @SerializedName("result")
         val result: Long = 0L,
 
+        @SerializedName("time")
+        val timeStamp: Long = 0L,
+
         @SerializedName("out")
         val outputs: List<TXO> = emptyList()
 )
