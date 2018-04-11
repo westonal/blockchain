@@ -1,17 +1,26 @@
 package info.blockchain.challenge.modules
 
+import info.blockchain.challenge.api.MultiAddress
 import info.blockchain.challenge.timberHttpLoggingInterceptor
+import info.blockchain.challenge.ui.WalletMviDialog
 import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient
 import org.kodein.di.Kodein
 import org.kodein.di.generic.bind
+import org.kodein.di.generic.instance
+import org.kodein.di.generic.provider
 import org.kodein.di.generic.singleton
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 val networkModule = Kodein.Module {
+
     bind() from singleton { retrofit() }
+
+    bind<MultiAddress>() with provider { instance<Retrofit>().create(MultiAddress::class.java) }
+
+    bind<WalletMviDialog>() with provider { WalletMviDialog(instance()) }
 }
 
 private fun retrofit() = Retrofit.Builder()
