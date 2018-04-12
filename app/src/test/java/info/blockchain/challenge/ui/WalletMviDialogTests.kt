@@ -30,7 +30,7 @@ class WalletMviDialogTests {
     fun `given no xpubs, no view models are created and service is not called`() {
         val service: MultiAddress = mock()
         WalletMviDialog(service, events)
-                .cardViewModels.test().assertNoValues()
+                .viewModel.test().assertNoValues()
         verifyZeroInteractions(service)
     }
 
@@ -40,11 +40,11 @@ class WalletMviDialogTests {
         val service: MultiAddress = givenServiceReturns(xpub, Transaction(result = 2L))
         val walletModule = WalletMviDialog(service, events)
         val testObserver = walletModule
-                .cardViewModels.test()
+                .viewModel.test()
 
         events.onNext(NewXpub(xpub))
 
-        testObserver.applyAssertsToValue { viewModel -> viewModel.size `should be` 2 }
+        testObserver.applyAssertsToValue { viewModel -> viewModel.cards.size `should be` 2 }
     }
 
     @Test
@@ -52,7 +52,7 @@ class WalletMviDialogTests {
         val xpub = "xpub12345"
         val service: MultiAddress = givenServiceReturns(xpub)
         val walletModule = WalletMviDialog(service, events)
-        walletModule.cardViewModels.test()
+        walletModule.viewModel.test()
         events.onNext(NewXpub(xpub))
         verify(service).multiaddr(xpub)
         verifyNoMoreInteractions(service)
@@ -64,7 +64,7 @@ class WalletMviDialogTests {
         val service: MultiAddress = givenServiceReturns(xpub)
         val walletModule = WalletMviDialog(service, events)
 
-        walletModule.cardViewModels.test()
+        walletModule.viewModel.test()
         events.onNext(NewXpub(xpub))
         events.onNext(NewXpub(xpub))
 
@@ -82,7 +82,7 @@ class WalletMviDialogTests {
         }
         val walletModule = WalletMviDialog(service, events)
 
-        walletModule.cardViewModels.test()
+        walletModule.viewModel.test()
         events.onNext(NewXpub(xpub1))
         events.onNext(NewXpub(xpub2))
 
@@ -106,13 +106,13 @@ class WalletMviDialogTests {
         val service: MultiAddress = givenServiceReturns(xpub, Transaction(result = 2L), Transaction(result = 3L))
         val walletModule = WalletMviDialog(service, events)
         val testObserver = walletModule
-                .cardViewModels.test()
+                .viewModel.test()
 
         events.onNext(NewXpub(xpub))
 
         testObserver.assertNotComplete()
 
-        testObserver.applyAssertsToValue { viewModel -> viewModel.size `should be` 3 }
+        testObserver.applyAssertsToValue { viewModel -> viewModel.cards.size `should be` 3 }
     }
 
     @Test
@@ -121,14 +121,16 @@ class WalletMviDialogTests {
         val service: MultiAddress = givenServiceThrows()
         val walletModule = WalletMviDialog(service, events)
         val testObserver = walletModule
-                .cardViewModels.test()
+                .viewModel.test()
 
         events.onNext(NewXpub(xpub))
 
         testObserver.applyAssertsToValue { viewModel ->
-            viewModel.size `should be` 1
-            viewModel[0] `should be instance of` ErrorCardViewModel::class
-            (viewModel[0] as ErrorCardViewModel).message `should equal` R.string.generic_error_retry
+            viewModel.cards.apply {
+                this.size `should be` 1
+                this[0] `should be instance of` ErrorCardViewModel::class
+                (this[0] as ErrorCardViewModel).message `should equal` R.string.generic_error_retry
+            }
         }
     }
 
@@ -143,19 +145,21 @@ class WalletMviDialogTests {
         }
         val walletModule = WalletMviDialog(service, events)
         val testObserver = walletModule
-                .cardViewModels.test()
+                .viewModel.test()
 
         events.onNext(NewXpub(xpub))
 
         testObserver.assertNotComplete()
 
         testObserver.applyAssertsToValue { viewModel ->
-            (viewModel[0] as ErrorCardViewModel).executeRetry()
+            (viewModel.cards[0] as ErrorCardViewModel).executeRetry()
         }
 
         testObserver.applyAssertsToValue(1) { viewModel ->
-            viewModel.size `should be` 2
-            viewModel[1] `should be instance of` TransactionCardViewModel::class
+            viewModel.cards.apply {
+                this.size `should be` 2
+                this[1] `should be instance of` TransactionCardViewModel::class
+            }
         }
 
         testObserver.valueCount() `should be` 2
@@ -173,7 +177,7 @@ class WalletMviDialogTests {
         }
         val walletModule = WalletMviDialog(service, events)
         val testObserver = walletModule
-                .cardViewModels.test()
+                .viewModel.test()
 
         events.onNext(NewXpub(xpub))
         events.onNext(Refresh())
@@ -181,13 +185,17 @@ class WalletMviDialogTests {
         testObserver.assertNotComplete()
 
         testObserver.applyAssertsToValue { viewModel ->
-            viewModel.size `should be` 2
-            viewModel[1] `should be instance of` TransactionCardViewModel::class
+            viewModel.cards.apply {
+                this.size `should be` 2
+                this[1] `should be instance of` TransactionCardViewModel::class
+            }
         }
 
         testObserver.applyAssertsToValue(1) { viewModel ->
-            viewModel.size `should be` 3
-            viewModel[1] `should be instance of` TransactionCardViewModel::class
+            viewModel.cards.apply {
+                this.size `should be` 3
+                this[1] `should be instance of` TransactionCardViewModel::class
+            }
         }
 
         testObserver.valueCount() `should be` 2

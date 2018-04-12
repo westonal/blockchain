@@ -41,14 +41,14 @@ class MainActivity : AppCompatActivity(), KodeinAware {
         swipe_refresh_layout.isRefreshing = true
 
         disposable += walletMviDialog
-                .cardViewModels
+                .viewModel
                 // Note: It can be too quick to see progress spinner, so just putting a false delay in for demo
                 .delay(1, TimeUnit.SECONDS)
                 // Note: Only now do I switch to the main thread, just before we need to update the UI
                 // the Module has mapped the service call to card view models for me already and is fully test driven
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy {
-                    recycler_view.adapter = CardAdapter(it)
+                    recycler_view.adapter = CardAdapter(it.cards)
                     recycler_view.scheduleLayoutAnimation()
                     swipe_refresh_layout.isRefreshing = false
                 }

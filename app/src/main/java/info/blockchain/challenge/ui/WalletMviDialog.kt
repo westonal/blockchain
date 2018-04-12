@@ -6,6 +6,7 @@ import info.blockchain.challenge.api.Result
 import info.blockchain.challenge.mapToCardViewModels
 import info.blockchain.challenge.ui.viewmodel.CardViewModel
 import info.blockchain.challenge.ui.viewmodel.ErrorCardViewModel
+import info.blockchain.challenge.ui.viewmodel.WalletViewModel
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 
@@ -49,7 +50,7 @@ class WalletMviDialog(
                 }
             })
 
-    val cardViewModels: Observable<List<CardViewModel>> = subject
+    val viewModel: Observable<WalletViewModel> = subject
             .skip(1) // Note: We know first xpub is empty string
             .distinctUntilChanged()
             .map { it.xpub }
@@ -65,4 +66,5 @@ class WalletMviDialog(
                                     ))
                         }
             }
+            .map { WalletViewModel(it) }
 }
