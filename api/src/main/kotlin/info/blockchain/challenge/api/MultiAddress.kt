@@ -38,8 +38,13 @@ class Transaction(
 
 class TXO(
         @SerializedName("addr")
-        val address: String,
+        val address: String = "",
 
         @SerializedName("xpub")
-        val xpub: Any?
+        val xpub: Xpub? = null
+)
+
+class Xpub(
+        @SerializedName("m")
+        val m: String = ""
 )

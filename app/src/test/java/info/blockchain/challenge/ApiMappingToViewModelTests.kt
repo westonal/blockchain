@@ -19,7 +19,7 @@ class ResultMappingTests {
         val onlyCard = Result(
                 wallet = Wallet(finalBalance = 1234L),
                 transactions = emptyList()
-        ).mapToCardViewModels().single()
+        ).mapToCardViewModels(Mapper("xpub")).single()
         (onlyCard as AccountCardViewModel).finalBalance `should equal` 1234L.satoshiToBtc()
     }
 
@@ -28,7 +28,7 @@ class ResultMappingTests {
         val cards = Result(
                 wallet = Wallet(finalBalance = 12345L),
                 transactions = listOf(Transaction(result = 9999L))
-        ).mapToCardViewModels()
+        ).mapToCardViewModels(Mapper("xpub"))
         cards.size `should be` 2
         (cards.first() as AccountCardViewModel).finalBalance `should equal` 12345L.satoshiToBtc()
         (cards.last() as TransactionVm).value `should equal` 9999L.satoshiToBtc()
@@ -42,7 +42,7 @@ class ResultMappingTests {
                         Transaction(result = 1234L),
                         Transaction(result = 5678L)
                 )
-        ).mapToCardViewModels()
+        ).mapToCardViewModels(Mapper("xpub"))
         cards.size `should be` 3
         (cards[0] as AccountCardViewModel).finalBalance `should equal` 1L.satoshiToBtc()
         (cards[1] as TransactionVm).value `should equal` 1234L.satoshiToBtc()
@@ -57,7 +57,7 @@ class ResultMappingTests {
                         Transaction(timeStamp = 1523447258L),
                         Transaction(timeStamp = 1491868800L)
                 )
-        ).mapToCardViewModels()
+        ).mapToCardViewModels(Mapper("xpub"))
         cards.size `should be` 3
         cards[1] as TransactionVm `should have time stamp` 1523447258_000L
         cards[2] as TransactionVm `should have time stamp` 1491868800_000L
