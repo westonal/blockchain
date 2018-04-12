@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.closestKodein
 import org.kodein.di.generic.instance
+import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity(), KodeinAware {
     override val kodein by closestKodein()
@@ -25,19 +26,25 @@ class MainActivity : AppCompatActivity(), KodeinAware {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         recycler_view.layoutManager = LinearLayoutManager(this)
+        swipe_refresh_layout.setOnRefreshListener { walletMviDialog.refresh() }
     }
 
     override fun onResume() {
         super.onResume()
 
+        swipe_refresh_layout.isRefreshing = true
+
         disposable += walletMviDialog
                 .cardViewModels
+                // Note: It can be too quick to see progress spinner, so just putting a false delay in for demo
+                .delay(1, TimeUnit.SECONDS)
                 // Note: Only now do I switch to the main thread, just before we need to update the UI
                 // the Module has mapped the service call to card view models for me already and is fully test driven
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy {
                     recycler_view.adapter = CardAdapter(it)
                     recycler_view.scheduleLayoutAnimation()
+                    swipe_refresh_layout.isRefreshing = false
                 }
 
         // Note: this causes the initial request
