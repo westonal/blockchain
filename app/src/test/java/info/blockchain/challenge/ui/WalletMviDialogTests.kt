@@ -158,6 +158,38 @@ class WalletMviDialogTests {
         verify(service, times(2)).multiaddr(xpub)
     }
 
+    @Test
+    fun `can be refreshed`() {
+        val xpub = "xpub34567"
+        val service: MultiAddress = mock {
+            on { multiaddr(any()) }
+                    .`it returns`(apiResult(Transaction(result = 2L)))
+                    // Note: set up to return with different results
+                    .`it returns`(apiResult(Transaction(result = 1L), Transaction(result = 2L)))
+        }
+        val walletModule = WalletMviDialog(service)
+        val testObserver = walletModule
+                .cardViewModels.test()
+
+        walletModule.xpub = xpub
+        walletModule.refresh()
+
+        testObserver.assertNotComplete()
+
+        testObserver.applyAssertsToValue { viewModel ->
+            viewModel.size `should be` 2
+            viewModel[1] `should be instance of` TransactionCardViewModel::class
+        }
+
+        testObserver.applyAssertsToValue(1) { viewModel ->
+            viewModel.size `should be` 3
+            viewModel[1] `should be instance of` TransactionCardViewModel::class
+        }
+
+        testObserver.valueCount() `should be` 2
+        verify(service, times(2)).multiaddr(xpub)
+    }
+
     private fun givenServiceThrows(): MultiAddress = mock {
         on { multiaddr(any()) } `it returns` Single.error<Result> { RuntimeException() }
     }

@@ -29,7 +29,7 @@ class WalletMviDialog(
                             ErrorCardViewModel(
                                     message = R.string.generic_error_retry,
                                     // Note: the Error card View Model is told how to refresh
-                                    retry = { subject.onNext(xpub) }
+                                    retry = { refresh() }
                             ))
                 }
     }
@@ -41,4 +41,8 @@ class WalletMviDialog(
                 field = value
             }
         }
+
+    fun refresh() {
+        subject.onNext(xpub)
+    }
 }
