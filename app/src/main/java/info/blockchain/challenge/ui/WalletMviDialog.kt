@@ -1,8 +1,8 @@
 package info.blockchain.challenge.ui
 
+import info.blockchain.challenge.Mapper
 import info.blockchain.challenge.R
 import info.blockchain.challenge.api.MultiAddress
-import info.blockchain.challenge.api.Result
 import info.blockchain.challenge.mapToCardViewModels
 import info.blockchain.challenge.ui.viewmodel.CardViewModel
 import info.blockchain.challenge.ui.viewmodel.ErrorCardViewModel
@@ -56,7 +56,7 @@ class WalletMviDialog(
             .map { it.xpub }
             .flatMapSingle { xpub ->
                 service.multiaddr(xpub)
-                        .map(Result::mapToCardViewModels)
+                        .map { it.mapToCardViewModels(Mapper(xpub)) }
                         .onErrorReturn {
                             listOf(
                                     ErrorCardViewModel(
