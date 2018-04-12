@@ -4,11 +4,16 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import info.blockchain.challenge.ui.CardAdapter
+import info.blockchain.challenge.ui.NewXpub
+import info.blockchain.challenge.ui.Refresh
+import info.blockchain.challenge.ui.WalletEvent
 import info.blockchain.challenge.ui.WalletMviDialog
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
+import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.activity_main.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.closestKodein
@@ -18,7 +23,8 @@ import java.util.concurrent.TimeUnit
 class MainActivity : AppCompatActivity(), KodeinAware {
     override val kodein by closestKodein()
 
-    private val walletMviDialog: WalletMviDialog by instance()
+    private val walletEvents = PublishSubject.create<WalletEvent>()
+    private val walletMviDialog: WalletMviDialog by instance(arg = walletEvents as Observable<WalletEvent>)
 
     private val disposable = CompositeDisposable()
 
@@ -26,7 +32,7 @@ class MainActivity : AppCompatActivity(), KodeinAware {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         recycler_view.layoutManager = LinearLayoutManager(this)
-        swipe_refresh_layout.setOnRefreshListener { walletMviDialog.refresh() }
+        swipe_refresh_layout.setOnRefreshListener { walletEvents.onNext(Refresh()) }
     }
 
     override fun onResume() {
@@ -48,7 +54,9 @@ class MainActivity : AppCompatActivity(), KodeinAware {
                 }
 
         // Note: this causes the initial request
-        walletMviDialog.xpub = "xpub6CfLQa8fLgtouvLxrb8EtvjbXfoC1yqzH6YbTJw4dP7srt523AhcMV8Uh4K3TWSHz9oDWmn9MuJogzdGU3ncxkBsAC9wFBLmFrWT9Ek81kQ"
+        walletEvents.onNext(
+                NewXpub("xpub6CfLQa8fLgtouvLxrb8EtvjbXfoC1yqzH6YbTJw4dP7srt523AhcMV8Uh4K3TWSHz9oDWmn9MuJogzdGU3ncxkBsAC9wFBLmFrWT9Ek81kQ")
+        )
     }
 
     override fun onPause() {
