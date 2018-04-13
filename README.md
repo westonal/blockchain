@@ -11,7 +11,7 @@ Tech Stack
 - [Kodein DI](http://kodein.org/)
 - [Kluent](https://github.com/MarkusAmshove/Kluent)
 - [Timber](https://github.com/JakeWharton/timber)
-- [Travis](https://travis-ci.org/westonal/blockchain.svg?branch=master)
+- [Travis](https://travis-ci.org/westonal/blockchain)
 
 Features
 ==
