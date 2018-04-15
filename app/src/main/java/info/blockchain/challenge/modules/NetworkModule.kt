@@ -5,6 +5,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.kodein.di.Kodein
 import org.kodein.di.generic.bind
+import org.kodein.di.generic.instance
 import org.kodein.di.generic.singleton
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -13,21 +14,23 @@ import timber.log.Timber
 
 val networkModule = Kodein.Module {
 
-    bind() from singleton { retrofit() }
-}
+    bind() from singleton {
+        // Note: Shared OkHttpClient instance is best practice, only used in another singleton, but should be
+        // singleton in its own right anyway
+        OkHttpClient.Builder()
+                .addInterceptor(timberHttpLoggingInterceptor())
+                .build()
+    }
 
-private fun retrofit() = Retrofit.Builder()
-        .baseUrl("https://blockchain.info/")
-        .addConverterFactory(GsonConverterFactory.create())
-        // Note: this line puts all Rx calls on the IO scheduler, so no need to specify subscribeOn later
-        .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
-        .client(okHttpClient())
-        .build()
-
-private fun okHttpClient(): OkHttpClient {
-    return OkHttpClient.Builder()
-            .addInterceptor(timberHttpLoggingInterceptor())
-            .build()
+    bind() from singleton {
+        Retrofit.Builder()
+                .baseUrl("https://blockchain.info/")
+                .addConverterFactory(GsonConverterFactory.create())
+                // Note: this line puts all Rx calls on the IO scheduler, so no need to specify subscribeOn later
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
+                .client(instance())
+                .build()
+    }
 }
 
 private fun timberHttpLoggingInterceptor() =

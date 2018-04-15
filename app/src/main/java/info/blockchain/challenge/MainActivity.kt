@@ -45,7 +45,8 @@ class MainActivity : AppCompatActivity(), KodeinAware {
                 // Note: It can be too quick to see progress spinner, so just putting a false delay in for demo
                 .delay(1, TimeUnit.SECONDS)
                 // Note: Only now do I switch to the main thread, just before we need to update the UI
-                // the Module has mapped the service call to card view models for me already and is fully test driven
+                // the mvi dialog has mapped the service call to card view models for me already and is fully test
+                // driven
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy {
                     recycler_view.adapter = CardAdapter(it.cards)

@@ -18,7 +18,7 @@ Features
 
 - High emphasis on quality and testing, with Travis integration from the beginning with master branch requiring tests to pass
 
-- Fully test-driven MVI "dialog" maps 2 event types (aka "intents"), `NewXpub` and `Refresh`, to an `Observable` stream of View Models
+- Fully test-driven MVI "dialog" applies 2 intent types, `NewXpubIntent` and `RefreshIntent`, to get an `Observable` stream of View Models
 
 - The Main activity just subscribes to the VM stream
 

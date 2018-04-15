@@ -3,7 +3,6 @@ package info.blockchain.challenge.ui
 import android.databinding.ViewDataBinding
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import info.blockchain.challenge.databinding.AccountLayoutBinding
 import info.blockchain.challenge.databinding.ErrorLayoutBinding
@@ -13,8 +12,9 @@ import info.blockchain.challenge.ui.viewmodel.CardViewModel
 import info.blockchain.challenge.ui.viewmodel.ErrorCardViewModel
 import info.blockchain.challenge.ui.viewmodel.TransactionCardViewModel
 
-class CardAdapter(private val transactions: List<CardViewModel>) :
-        RecyclerView.Adapter<CardViewHolder>() {
+class CardAdapter(
+        private val transactions: List<CardViewModel>
+) : RecyclerView.Adapter<CardViewHolder>() {
 
     override fun getItemViewType(position: Int) =
             when (transactions[position]) {
@@ -24,7 +24,7 @@ class CardAdapter(private val transactions: List<CardViewModel>) :
             }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardViewHolder =
-            ViewHolder(newBinding(viewType, LayoutInflater.from(parent.context), parent))
+            CardViewHolder(newBinding(viewType, LayoutInflater.from(parent.context), parent))
 
     private fun newBinding(viewType: Int, layoutInflater: LayoutInflater, parent: ViewGroup) =
             when (viewType) {
@@ -35,17 +35,15 @@ class CardAdapter(private val transactions: List<CardViewModel>) :
             }
 
     override fun onBindViewHolder(holder: CardViewHolder, position: Int) {
-        (holder as ViewHolder).bind(transactions[position])
+        holder.bind(transactions[position])
     }
 
     override fun getItemCount() = transactions.size
 }
 
-sealed class CardViewHolder(val view: View) : RecyclerView.ViewHolder(view)
-
-private class ViewHolder(
+class CardViewHolder(
         private val binding: ViewDataBinding
-) : CardViewHolder(binding.root) {
+) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(item: Any) {
         binding.setVariable(info.blockchain.challenge.BR.item, item)
