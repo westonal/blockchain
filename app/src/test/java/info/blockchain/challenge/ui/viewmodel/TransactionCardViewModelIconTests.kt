@@ -4,7 +4,6 @@ import info.blockchain.challenge.R
 import org.amshove.kluent.`should equal`
 import org.junit.Test
 
-
 class TransactionCardViewModelIconTests {
 
     @Test

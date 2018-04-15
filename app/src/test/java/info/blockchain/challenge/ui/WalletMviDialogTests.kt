@@ -27,7 +27,7 @@ class WalletMviDialogTests {
     private val intents = PublishSubject.create<WalletIntent>()
 
     @Test
-    fun `given no xpubs, no view models are created and service is not called`() {
+    fun `when no xpubs, no view models are created and service is not called`() {
         val service = mock<BlockchainService>()
         WalletMviDialog(service, intents)
                 .viewModel.test().assertNoValues()
@@ -35,7 +35,7 @@ class WalletMviDialogTests {
     }
 
     @Test
-    fun `given a single xpub, the service is called and result is mapped to a view model`() {
+    fun `when supplied a single xpub, the service is called and result is mapped to a view model`() {
         val xpub = "xpub12345"
         val service = givenServiceReturns(xpub, Transaction(result = 2L))
         val walletModule = WalletMviDialog(service, intents)
@@ -48,24 +48,12 @@ class WalletMviDialogTests {
     }
 
     @Test
-    fun `given a single xpub, the service is called just once`() {
+    fun `when supplied a single xpub, the service is called just once`() {
         val xpub = "xpub12345"
         val service = givenServiceReturns(xpub)
         val walletModule = WalletMviDialog(service, intents)
         walletModule.viewModel.test()
-        intents.onNext(NewXpubIntent(xpub))
-        verify(service).multiAddress(xpub)
-        verifyNoMoreInteractions(service)
-    }
 
-    @Test
-    fun `given the same xpub twice, the service is called just once`() {
-        val xpub = "xpub12345"
-        val service = givenServiceReturns(xpub)
-        val walletModule = WalletMviDialog(service, intents)
-
-        walletModule.viewModel.test()
-        intents.onNext(NewXpubIntent(xpub))
         intents.onNext(NewXpubIntent(xpub))
 
         verify(service).multiAddress(xpub)
@@ -73,7 +61,21 @@ class WalletMviDialogTests {
     }
 
     @Test
-    fun `given two xpubs, the service is called twice`() {
+    fun `when supplied the same xpub twice, the service is called just once`() {
+        val xpub = "xpub12345"
+        val service = givenServiceReturns(xpub)
+        val walletModule = WalletMviDialog(service, intents)
+        walletModule.viewModel.test()
+
+        intents.onNext(NewXpubIntent(xpub))
+        intents.onNext(NewXpubIntent(xpub))
+
+        verify(service).multiAddress(xpub)
+        verifyNoMoreInteractions(service)
+    }
+
+    @Test
+    fun `when supplied two xpubs, the service is called twice`() {
         val xpub1 = "xpub12345"
         val xpub2 = "xpub23456"
         val service = mock<BlockchainService> {
@@ -81,8 +83,8 @@ class WalletMviDialogTests {
             on { it.multiAddress(xpub2) } `it returns` apiResult()
         }
         val walletModule = WalletMviDialog(service, intents)
-
         walletModule.viewModel.test()
+
         intents.onNext(NewXpubIntent(xpub1))
         intents.onNext(NewXpubIntent(xpub2))
 
@@ -92,16 +94,18 @@ class WalletMviDialogTests {
     }
 
     @Test
-    fun `given a single xpub, the service is called zero times if not subscribed to`() {
+    fun `when supplied a single xpub, the service is called zero times if not subscribed to`() {
         val xpub = "xpub12345"
         val service = givenServiceReturns(xpub)
         WalletMviDialog(service, intents)
+
         intents.onNext(NewXpubIntent(xpub))
+
         verifyZeroInteractions(service)
     }
 
     @Test
-    fun `given a single xpub, the service is called and result with 2 transactions is mapped to a view model`() {
+    fun `when supplied a single xpub, the service is called and result with 2 transactions is mapped to a view model`() {
         val xpub = "xpub23456"
         val service = givenServiceReturns(xpub, Transaction(result = 2L), Transaction(result = 3L))
         val walletModule = WalletMviDialog(service, intents)
@@ -111,12 +115,11 @@ class WalletMviDialogTests {
         intents.onNext(NewXpubIntent(xpub))
 
         testObserver.assertNotComplete()
-
         testObserver.applyAssertsToValue { viewModel -> viewModel.cards.size `should be` 3 }
     }
 
     @Test
-    fun `if the service throws an exception, a single ErrorCard is shown`() {
+    fun `when the service throws an exception, a single ErrorCard is shown`() {
         val xpub = "xpub23456"
         val service = givenServiceThrows()
         val walletModule = WalletMviDialog(service, intents)
@@ -215,4 +218,3 @@ class WalletMviDialogTests {
                     transactions = listOf(*transactions)))
 
 }
-
