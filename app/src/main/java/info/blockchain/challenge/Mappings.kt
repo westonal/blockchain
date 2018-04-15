@@ -17,7 +17,7 @@ class Mapper(private val walletXpub: String) {
     fun mapToViewModel(transaction: Transaction) =
             TransactionCardViewModel(
                     value = transaction.result.satoshiToBtc(),
-                    address = transaction.outputs.findFirstNonWalletAddress(),
+                    address = transaction.outputs.findFirstNonChangeAddress(),
                     date = Date(transaction.timeStamp * 1000)
             )
 
@@ -26,11 +26,11 @@ class Mapper(private val walletXpub: String) {
 
     private fun Result.mapToAccountViewModel() = AccountCardViewModel(this.wallet.finalBalance.satoshiToBtc())
 
-    private fun List<TXO>.findFirstNonWalletAddress() =
-            this.firstNonWalletTransactionOutput()?.address ?: ""
+    private fun List<TXO>.findFirstNonChangeAddress() =
+            this.firstNonChangeTransactionOutput()?.address ?: ""
 
-    private fun List<TXO>.firstNonWalletTransactionOutput() =
-            this.firstOrNull { !it.isWalletAddress() }
+    private fun List<TXO>.firstNonChangeTransactionOutput() =
+            this.firstOrNull { !it.sentToChangeAddress() }
 
-    private fun TXO.isWalletAddress() = this.xpub?.m == walletXpub
+    private fun TXO.sentToChangeAddress() = this.xpub?.m == walletXpub
 }
