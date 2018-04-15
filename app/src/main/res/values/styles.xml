@@ -17,7 +17,7 @@
     </style>
 
     <style name="Text.Value">
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="Text.Date">
@@ -25,7 +25,7 @@
     </style>
 
     <style name="Text.Value.Large">
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">22sp</item>
     </style>
 
 </resources>
