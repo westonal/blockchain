@@ -26,11 +26,11 @@ Features
 
 - Pull down to refresh
 
+- DiffUtil, only animates changes
+
 Future work
 ==
 
 - A new request is fired on each activity resume, VMs are cheap to make, so caching at OkHttp client level is an option that both solves this and prevents an app calling the server too frequently. Other options are to cache the VM in the RX stream.
-
-- Use `DiffUtil` to animate only the changes in the list in the `RecyclerView`.
 
 - Technically the transactions are homogeneous content and so shouldn't have their own cards.

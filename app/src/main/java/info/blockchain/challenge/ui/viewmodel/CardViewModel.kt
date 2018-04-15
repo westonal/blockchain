@@ -15,6 +15,7 @@ class AccountCardViewModel(
 ) : CardViewModel()
 
 class TransactionCardViewModel(
+        val id: Long,
         // Note: Here I'm preferring to use a strong type, not sticking to the Long from the api call
         val value: Btc,
         val address: String = "",

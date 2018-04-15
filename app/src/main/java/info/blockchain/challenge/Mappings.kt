@@ -16,6 +16,7 @@ fun Transaction.mapToViewModel(mapper: Mapper) = mapper.mapToViewModel(this)
 class Mapper(private val walletXpub: String) {
     fun mapToViewModel(transaction: Transaction) =
             TransactionCardViewModel(
+                    id = transaction.hashToALong(),
                     value = transaction.result.satoshiToBtc(),
                     address = transaction.outputs.findFirstNonChangeAddress(),
                     date = Date(transaction.timeStamp * 1000)
@@ -33,4 +34,23 @@ class Mapper(private val walletXpub: String) {
             this.firstOrNull { !it.sentToChangeAddress() }
 
     private fun TXO.sentToChangeAddress() = this.xpub?.m == walletXpub
+}
+
+private fun Transaction.hashToALong(): Long {
+    if (this.hash.length > 15 && this.hash.isHex()) {
+        //I need a Long for a hash, so I'm taking the first 16 chars of the longer transaction hash
+        return java.lang.Long.parseLong(this.hash.substring(0, 2), 16).shl(56) +
+                java.lang.Long.parseLong(this.hash.substring(2, 16), 16)
+    }
+    // This is a sensible fallback
+    return this.timeStamp
+}
+
+private fun String.isHex() = all {
+    return when (it) {
+        in '0'..'9' -> true
+        in 'a'..'f' -> true
+        in 'A'..'F' -> true
+        else -> false
+    }
 }
