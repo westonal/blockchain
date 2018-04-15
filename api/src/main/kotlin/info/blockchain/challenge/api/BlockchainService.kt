@@ -5,10 +5,10 @@ import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface MultiAddress {
+interface BlockchainService {
 
     @GET("multiaddr")
-    fun multiaddr(@Query("active") xpub: String): Single<Result>
+    fun multiAddress(@Query("active") xpub: String): Single<Result>
 
 }
 

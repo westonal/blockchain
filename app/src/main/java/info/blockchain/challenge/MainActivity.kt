@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import info.blockchain.challenge.ui.CardAdapter
-import info.blockchain.challenge.ui.NewXpub
-import info.blockchain.challenge.ui.Refresh
-import info.blockchain.challenge.ui.WalletEvent
+import info.blockchain.challenge.ui.NewXpubIntent
+import info.blockchain.challenge.ui.RefreshIntent
+import info.blockchain.challenge.ui.WalletIntent
 import info.blockchain.challenge.ui.WalletMviDialog
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -23,8 +23,8 @@ import java.util.concurrent.TimeUnit
 class MainActivity : AppCompatActivity(), KodeinAware {
     override val kodein by closestKodein()
 
-    private val walletEvents = PublishSubject.create<WalletEvent>()
-    private val walletMviDialog: WalletMviDialog by instance(arg = walletEvents as Observable<WalletEvent>)
+    private val walletIntents = PublishSubject.create<WalletIntent>()
+    private val walletMviDialog: WalletMviDialog by instance(arg = walletIntents as Observable<WalletIntent>)
 
     private val disposable = CompositeDisposable()
 
@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity(), KodeinAware {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         recycler_view.layoutManager = LinearLayoutManager(this)
-        swipe_refresh_layout.setOnRefreshListener { walletEvents.onNext(Refresh()) }
+        swipe_refresh_layout.setOnRefreshListener { walletIntents.onNext(RefreshIntent()) }
     }
 
     override fun onResume() {
@@ -54,8 +54,8 @@ class MainActivity : AppCompatActivity(), KodeinAware {
                 }
 
         // Note: this causes the initial request
-        walletEvents.onNext(
-                NewXpub("xpub6CfLQa8fLgtouvLxrb8EtvjbXfoC1yqzH6YbTJw4dP7srt523AhcMV8Uh4K3TWSHz9oDWmn9MuJogzdGU3ncxkBsAC9wFBLmFrWT9Ek81kQ")
+        walletIntents.onNext(
+                NewXpubIntent("xpub6CfLQa8fLgtouvLxrb8EtvjbXfoC1yqzH6YbTJw4dP7srt523AhcMV8Uh4K3TWSHz9oDWmn9MuJogzdGU3ncxkBsAC9wFBLmFrWT9Ek81kQ")
         )
     }
 

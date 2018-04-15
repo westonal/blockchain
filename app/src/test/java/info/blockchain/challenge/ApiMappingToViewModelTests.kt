@@ -15,7 +15,7 @@ typealias TransactionVm = info.blockchain.challenge.ui.viewmodel.TransactionCard
 class ResultMappingTests {
 
     @Test
-    fun `map result to Card view models`() {
+    fun `map result to single Card view model`() {
         val onlyCard = Result(
                 wallet = Wallet(finalBalance = 1234L),
                 transactions = emptyList()
