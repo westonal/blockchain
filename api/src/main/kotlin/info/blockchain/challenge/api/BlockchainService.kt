@@ -26,6 +26,9 @@ class Wallet(
 )
 
 class Transaction(
+        @SerializedName("hash")
+        val hash: String = "",
+
         @SerializedName("result")
         val result: Long = 0L,
 

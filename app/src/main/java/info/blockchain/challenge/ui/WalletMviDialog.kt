@@ -10,6 +10,7 @@ import info.blockchain.challenge.ui.viewmodel.WalletViewModel
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
+import timber.log.Timber
 
 // Note: intents are used as input to the MVI dialog, more detail below
 sealed class WalletIntent
@@ -62,6 +63,7 @@ class WalletMviDialog(
         return service.multiAddress(xpub)
                 .map { it.mapToCardViewModels(Mapper(xpub)) }
                 .onErrorReturn {
+                    Timber.e(it)
                     listOf(
                             ErrorCardViewModel(
                                     message = R.string.generic_error_retry,

@@ -16,6 +16,6 @@ class TransactionCardViewModelIconTests {
         givenTransactionOfValue(-1L).icon `should equal` R.drawable.ic_sent_24dp
     }
 
-    private fun givenTransactionOfValue(value: Long) = TransactionCardViewModel(value.satoshiToBtc())
+    private fun givenTransactionOfValue(value: Long) = TransactionCardViewModel(id = 1, value = value.satoshiToBtc())
 
 }

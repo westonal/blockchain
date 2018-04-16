@@ -18,10 +18,12 @@ class ApiResponseDeserializationTests {
         givenResponse().apply {
             transactions.size `should equal` 2
             transactions[0].apply {
+                hash `should equal` "9a50294db30b1fa33c91fe539519ed7c3664d3499d89c6d18fc703790f874884"
                 result `should equal` -21121
                 timeStamp `should equal` 1523550526
             }
             transactions[1].apply {
+                hash `should equal` "0ddd9e10220bc0fad5f71705d4802803ec83a3e35a1a1f0f720a21a2e1c664a4"
                 result `should equal` -40863
                 timeStamp `should equal` 1511799512
             }

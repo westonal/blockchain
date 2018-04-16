@@ -28,10 +28,13 @@ class MainActivity : AppCompatActivity(), KodeinAware {
 
     private val disposable = CompositeDisposable()
 
+    private val cardAdapter = CardAdapter()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         recycler_view.layoutManager = LinearLayoutManager(this)
+        recycler_view.adapter = cardAdapter
         swipe_refresh_layout.setOnRefreshListener { walletIntents.onNext(RefreshIntent()) }
     }
 
@@ -49,8 +52,11 @@ class MainActivity : AppCompatActivity(), KodeinAware {
                 // driven
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy {
-                    recycler_view.adapter = CardAdapter(it.cards)
-                    recycler_view.scheduleLayoutAnimation()
+                    val wasEmpty = cardAdapter.isEmpty()
+                    cardAdapter.updateList(it.cards)
+                    if (wasEmpty) {
+                        recycler_view.scheduleLayoutAnimation()
+                    }
                     swipe_refresh_layout.isRefreshing = false
                 }
 
@@ -67,5 +73,3 @@ class MainActivity : AppCompatActivity(), KodeinAware {
     }
 
 }
-
-

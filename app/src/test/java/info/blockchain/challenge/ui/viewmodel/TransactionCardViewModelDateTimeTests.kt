@@ -34,7 +34,10 @@ class TransactionCardViewModelDateTimeTests {
                 set(year, month - 1, day, hour, minute, second)
             }.time
 
-    private fun givenTransactionOfDateTime(date: Date?) = TransactionCardViewModel(0L.satoshiToBtc(),
-            date = date)
+    private fun givenTransactionOfDateTime(date: Date?) = TransactionCardViewModel(
+            id = 1,
+            value = 0L.satoshiToBtc(),
+            date = date
+    )
 
 }
